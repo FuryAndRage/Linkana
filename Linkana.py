@@ -11,7 +11,7 @@ class ConverteJSCript:
     def video_js_py(self):
         self.link = ''
         self.contador=0
-        with open (f'NEW_{self.arquivo}','w') as file:
+        with open (f'VideoJs_{self.arquivo}','w') as file:
             with open(f'{self.arquivo}','r+') as arq:
                 leu = arq.readlines()
             for item in leu:
@@ -23,7 +23,7 @@ class ConverteJSCript:
                 
     def captura_link(self):
         self.contador = 0
-        with open (f'LINK_{self.arquivo}', 'w') as file:
+        with open (f'NEW_{self.arquivo}', 'w') as file:
             with open(f'{self.arquivo}', 'r+') as arq:
                 ler_arq = arq.readlines()
             for item in ler_arq:
