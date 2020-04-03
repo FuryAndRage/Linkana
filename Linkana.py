@@ -41,7 +41,8 @@ class ConverteJSCript:
         with open(f'{self.arquivo}','r') as file:
             arq = file.readlines()
             for item in arq:
-                with open(f'arquivo_{contador}.mp4','wb') as arq:
+                with open(f'arquivo_{self.contador}.mp4','wb') as arq:
+                    print(f'Downloading arquivo_{self.contador}')
                     req = requests.get(item.strip())
                     size = int(req.headers['content-length']) /(1000**2)
                     
@@ -51,7 +52,7 @@ class ConverteJSCript:
                     arq.write(req.content)
                     print(f'arquivo_{contador}.mp4 was saved')
                     print(f'with {size}Mb')
-                    contador +=1
+                    self.contador +=1
 
     def captura_link_valido(self):
         self.contador = 0
