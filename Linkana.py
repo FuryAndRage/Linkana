@@ -1,13 +1,21 @@
-import requests
-import os
+import requests, os, sys, time
 
-clear = lambda: os.system('clear')
-class ConverteJSCript:
-    def __init__(self, arquivo,imagem):
+
+if sys.platform == 'linux':
+    clear = lambda: os.system('clear')
+if sys.platform == 'windows':
+    clear = lambda: os.system('cls')
+
+
+class LinkanaMain:
+    def __init__(self, arquivo,imagem,servidor,entrada):
+        self.servidor = servidor
+        self.entrada = entrada
         self.arquivo = arquivo
         self.imagem = imagem
         self.link = ''
         self.contador = 0
+
     def video_js_py(self):
         self.link = ''
         self.contador=0
@@ -18,12 +26,14 @@ class ConverteJSCript:
                 if 'http' in item:
                     self.link += "{sources: [{src:'url' ,type: 'video/mp4'}],poster: 'image'},".replace('url', item.strip()).replace('image', self.imagem)
             file.write(self.link)
-
+        clear()
+        print('File was created successfully')
+        time.sleep(2)
             
                 
     def captura_link(self):
         self.contador = 0
-        with open (f'NEW_{self.arquivo}', 'w') as file:
+        with open (f'LINK_{self.arquivo}', 'w') as file:
             with open(f'{self.arquivo}', 'r+') as arq:
                 ler_arq = arq.readlines()
             for item in ler_arq:
@@ -33,7 +43,9 @@ class ConverteJSCript:
                         self.link += item.strip() + '\n'
             file.write(self.link)
             print(f'{self.contador} urls')
-
+        clear()
+        print('File was created successfully')
+        time.sleep(2)
 
         
     def download_link(self):
@@ -55,7 +67,6 @@ class ConverteJSCript:
                     print('')
                     print('')
                     print('')
-                    
 
     def captura_link_valido(self):
         self.contador = 0
@@ -75,8 +86,24 @@ class ConverteJSCript:
 
 
             file.write(self.link)
-                    
-        
+        clear()
+        print('File was created successfully')
+        time.sleep(2)
+                            
+    def video_js_py_folder(self):
+        self.link = ''
+        for raiz, pastas, arquivos in os.walk(self.entrada):
+            with open('lista.txt', 'w+') as file:
+                for arquivo in arquivos:
+                    self.link += "{sources: [{src:'url' ,type: 'video/mp4'}],poster: 'image'},".replace('url', self.servidor+arquivo).replace('image', self.imagem)
+                    print(arquivo)
+                            
+                file.write(self.link)  
+
+        clear()
+        print('File was created successfully')
+        time.sleep(2)
+
 
 while True:
     print('###########################################################################')
@@ -99,39 +126,54 @@ while True:
     print('# 2) GET VALID LINKS ********* New list with valid links from a link list #')
     print('# 3) DOWNLOAD ********************* Download Files from a valid link list #')
     print('# 4) VIDEOJSPY ******************Generate a playlist for VideoJs Playlist #')
-    print('# 5) *************************** EXIT *********************************** #')
+    print('# 5) VIDEOJSPY v2 *** Playlist for VideoJs Playlist from files on folder  #')
+    print('# 6) *************************** EXIT *********************************** #')
     print('###########################################################################')
     choose_input = input('Choose a option: \n')
     
     if choose_input == '1':
         arquivo = input('Choose your file: \n')
-        imagem = ('')
-        file_get = ConverteJSCript(arquivo, imagem)
+        imagem = ''
+        end_server = ''
+        pasta_entrada = ''
+        file_get = LinkanaMain(arquivo, imagem,end_server, pasta_entrada)
         file_get.captura_link()
         clear()
 
     if choose_input == '2':
         arquivo = input('Choose your file: \n')
-        imagem = ('')
-        file_get = ConverteJSCript(arquivo, imagem)
+        imagem = ''
+        end_server = ''
+        pasta_entrada = ''
+        file_get = LinkanaMain(arquivo, imagem,end_server, pasta_entrada)
         file_get.captura_link_valido()
         clear()
 
     if choose_input == '3':
         arquivo = input('Choose your file: \n')
-        imagem = ('')
-        file_get = ConverteJSCript(arquivo, imagem)
+        imagem = ''
+        end_server = ''
+        pasta_entrada = ''
+        file_get = LinkanaMain(arquivo, imagem,end_server, pasta_entrada)
         clear()
         file_get.download_link()
 
     if choose_input == '4':
         arquivo = input('Choose your file: \n')
         imagem = input('Choose the image file or url to use: \n')
-        file_get = ConverteJSCript(arquivo, imagem)
+        end_server = ''
+        pasta_entrada = ''
+        file_get = LinkanaMain(arquivo, imagem,end_server, pasta_entrada)
         file_get.video_js_py()
         clear()
-
     if choose_input == '5':
+        arquivo = ''
+        imagem = input('Choose the image file or url to use: \n')
+        end_server = input('Url of your server and folder: \n')
+        pasta_entrada = input('Path where are your files to create a lista: \n')
+        file_get = LinkanaMain(arquivo, imagem,end_server, pasta_entrada)
+        file_get.video_js_py_folder()
+    if choose_input == '6':
         break
 
     else:
